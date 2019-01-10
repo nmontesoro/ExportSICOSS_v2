@@ -17,6 +17,7 @@ sPathDBSICOSS = SYS(5) + SYS(2003) + "\sijp12\sijp12.mdb"
 sPathFieldInfo = ".\fieldinfo.txt"
 sPathPlanilla = SYS(5) + SYS(2003) + "\Recibo.xls"
 sOutFilename = ".\eSICOSS.txt"
+nYear = IIF(sCurrentMonth == "12", YEAR(DATE()) - 1, YEAR(DATE()))
 
 #IFDEF testing
 	sCurrentMonth = "10"
@@ -37,7 +38,7 @@ ENDTEXT
 ? "Accediendo a SICOSS..."
 
 xSQLConn = SQLSTRINGCONNECT(sSQLStr)
-sPeriod = "'" + ALLTRIM(STR(YEAR(DATE()))) + PADL(sCurrentMonth, 2, '0') + "'"
+sPeriod = "'" + ALLTRIM(STR(nYear)) + PADL(sCurrentMonth, 2, '0') + "'"
 sQuery = "SELECT * FROM 22CUILes WHERE [Período]=" + sPeriod
 
 IF xSQLConn >= 1
@@ -54,7 +55,7 @@ ENDIF
 
 SELECT * FROM recibo ;
 	WHERE ALLTRIM(STR(MONTH(feclia)))==sCurrentMonth ;
-	AND YEAR(feclia)==YEAR(DATE()) ;
+	AND YEAR(feclia)==nYear ;
 	ORDER BY cuil ASC ;
 	INTO CURSOR C_Rec READWRITE
 
